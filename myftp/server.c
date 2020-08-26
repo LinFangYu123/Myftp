@@ -126,7 +126,7 @@ int main(){
 					else if(strstr(buf,"quit") == buf){
 						log_write("IP:%s PORT:%d DISCONNECT!\n",\
 							inet_ntoa(clie.sin_addr),ntohs(clie.sin_port));
-						exit(0);
+						exit(1);
 					}
 				}
 			}
