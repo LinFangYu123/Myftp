@@ -40,11 +40,11 @@ int main(int argc,char *argv[]){
 		char buf[SIZE_BUF];
 		int len;
 		memset(buf,0,sizeof(buf));
-		printf("myftp>");
+		printf("myftp> ");
 		fgets(buf,sizeof(buf),stdin);
 		if(strstr(buf,"quit")==buf){
-			send(sfd,buf,strlen(buf),0);
-			usleep(500);
+			send(sfd,buf,sizeof(buf),0);
+			usleep(100);
 			break;
 		}
 		else if(strstr(buf,"lcd")==buf){

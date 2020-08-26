@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
@@ -25,14 +24,6 @@ void get(int cfd,char *filename,struct sockaddr_in clie);
 
 void put(int cfd,char *filename,struct sockaddr_in clie);
 
-=======
-
-#include "logc.h"
-#include "ftp.h"
-
-#define SIZE_BUF 1024
-
->>>>>>> FTP
 void catch_sig(int num){
 	pid_t wpid;
    	if((wpid = waitpid(0,NULL,WNOHANG)) == -1)
@@ -132,6 +123,11 @@ int main(){
 						getcwd(buf,sizeof(buf));
 						send(cfd,buf,sizeof(buf),0);
 					}
+					else if(strstr(buf,"quit") == buf){
+						log_write("IP:%s PORT:%d DISCONNECT!\n",\
+							inet_ntoa(clie.sin_addr),ntohs(clie.sin_port));
+						exit(0);
+					}
 				}
 			}
 		}
@@ -146,7 +142,7 @@ int main(){
 		
 }
 
-<<<<<<< HEAD
+
 void Dirlist(int fd){
 	FILE *in;
 	char filename[SIZE_BUF];
@@ -217,7 +213,7 @@ void get(int cfd,char *filename,struct sockaddr_in clie){
 					inet_ntoa(clie.sin_addr),ntohs(clie.sin_port));
 			fclose(fd);
 			close(cfd);
-			exit(0);
+			exit(1);
 		}
 		fclose(fd);
 	}
@@ -285,6 +281,4 @@ void put(int cfd,char *filename,struct sockaddr_in clie){
 		exit(1);
 	}
 }
-=======
 
->>>>>>> FTP
