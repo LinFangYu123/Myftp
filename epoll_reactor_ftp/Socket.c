@@ -48,7 +48,7 @@ again:
 		if(errno == ECONNABORTED|errno == EINTR){
 			goto again;
 		}
-		else perr_exit("accept");
+		perr_exit("accept");
 	}
 	return n;
 }

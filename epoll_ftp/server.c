@@ -74,7 +74,7 @@ int main(){
 			if(m->fd == sfd){
 				int cfd = accept(sfd,(struct sockaddr *)&clie,&clie_len);	//接收客户端的连接请求
 				if(cfd == -1){
-					if(errno == EINTR){
+					if(errno == EWOULDBLOCK||errno == EINTR){
 						continue;
 					}
 					else{

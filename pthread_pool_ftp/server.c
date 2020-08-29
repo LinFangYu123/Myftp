@@ -28,16 +28,7 @@ int main(){
 	while(1){
 		struct sockaddr_in clie ;										//定义客户端的地址族
 		socklen_t clie_len = sizeof(struct sockaddr_in);	
-		int cfd = accept(sfd,(struct sockaddr *)&clie,&clie_len);	//接收客户端的连接请求
-		if(cfd == -1){
-			if(errno == EINTR){
-				continue;
-			}
-			else{
-				log_write("accept err");
-				break;
-			}
-		}
+		int cfd = Accept(sfd,(struct sockaddr *)&clie,&clie_len);	//接收客户端的连接请求
 		while(get_current_thread_task_num(pool) >= get_max_thread_num(pool)){
 			usleep(500);
 		}
