@@ -39,6 +39,8 @@ int main(){
 		msg->sock = clie;
 		thread_pool_add_task(pool,task,(void *)msg);
 	}
+	log_close();
+	return 0;
 }
 
 void *task(void *arg){
