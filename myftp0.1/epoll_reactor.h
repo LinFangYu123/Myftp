@@ -18,10 +18,10 @@ struct my_event{
 
 int eventset(struct my_event *ev, int fd, void (*callback)(void *arg), void *arg, void *args);
 
-int eventadd(int epfd,int events,struct my_event *ev);
+int eventadd(int epfd, int events, struct my_event *ev);
 
-int eventmod(int epfd,int events,struct my_event *ev);
+int eventmod(int epfd, int events, struct my_event *ev);
 
-int eventdel(int epfd,struct my_event *ev);
+int eventdel(int epfd, struct my_event *ev);
 
 #endif

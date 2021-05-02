@@ -12,9 +12,9 @@ int eventset(struct my_event *ev, int fd, void (*callback)(void *arg), void *arg
 }
 
 //将事件添加到树上
-int eventadd(int epfd,int events,struct my_event *ev){
+int eventadd(int epfd, int events, struct my_event *ev){
     struct epoll_event epv;
-    bzero(&epv,sizeof(epv));
+    bzero(&epv, sizeof(epv));
     epv.data.ptr = ev;
     epv.events = ev->events = events;
     if(ev->status == 0){       //当status为1时 代表文件描述符已经在树上 eventadd失败
@@ -24,7 +24,7 @@ int eventadd(int epfd,int events,struct my_event *ev){
     else {
         return -1;
     }
-    if(epoll_ctl(epfd,EPOLL_CTL_ADD,ev->fd,&epv)!=0){
+    if(epoll_ctl(epfd, EPOLL_CTL_ADD, ev->fd, &epv)!=0){
         perror("epoll_ctl");
         return -1;
     }
@@ -33,15 +33,15 @@ int eventadd(int epfd,int events,struct my_event *ev){
 }
 
 //修改树上的事件
-int eventmod(int epfd,int events,struct my_event *ev){
+int eventmod(int epfd, int events, struct my_event *ev){
     struct epoll_event epv;
-    bzero(&epv,sizeof(epv));
+    bzero(&epv, sizeof(epv));
     epv.data.ptr = ev;
     epv.events = ev->events = events;
     if(ev->status == 0) {      //当status为0时 代表文件描述符不在树上 eventmod失败
         return -1;
     }
-    if(epoll_ctl(epfd,EPOLL_CTL_MOD,ev->fd,&epv)!=0){
+    if(epoll_ctl(epfd, EPOLL_CTL_MOD, ev->fd, &epv)!=0){
         perror("epoll_ctl");
         return -1;
     }
@@ -50,7 +50,7 @@ int eventmod(int epfd,int events,struct my_event *ev){
 }
 
 //删除树上的事件
-int eventdel(int epfd,struct my_event *ev){
+int eventdel(int epfd, struct my_event *ev){
     struct epoll_event epv = {0, {0}};
     if(ev->status == 0){
         return -1;
@@ -58,6 +58,6 @@ int eventdel(int epfd,struct my_event *ev){
     ev->status = 0;
     //ev = NULL;
     epv.data.ptr = NULL;
-    epoll_ctl(epfd,EPOLL_CTL_DEL,ev->fd,&epv);
+    epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, &epv);
     return 0;
 }

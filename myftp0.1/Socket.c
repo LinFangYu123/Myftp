@@ -5,10 +5,10 @@ void perr_exit(const char *str){
     exit(1);
 }
 
-int Socket(int family,int type,int protocol){
+int Socket(int family, int type, int protocol){
     int n;
 again:
-    if((n = socket(family,type,protocol)) == -1){
+    if((n = socket(family, type, protocol)) == -1){
         if(errno == EINTR){
             goto again;
         }
@@ -17,10 +17,10 @@ again:
     return n;
 }
 
-int Bind(int fd ,const struct sockaddr *sa,socklen_t sa_len){
+int Bind(int fd ,const struct sockaddr *sa, socklen_t sa_len){
     int n;
 again:
-    if((n = bind(fd,sa,sa_len)) == -1){
+    if((n = bind(fd, sa, sa_len)) == -1){
         if(errno == EINTR){
             goto again;
         }
@@ -29,10 +29,10 @@ again:
     return n;
 }
 
-int Listen(int fd,int backlog){
+int Listen(int fd, int backlog){
     int n;
 again:
-    if((n = listen(fd,backlog)) == -1){
+    if((n = listen(fd, backlog)) == -1){
         if(errno == EINTR){
             goto again;
         }
@@ -41,10 +41,10 @@ again:
     return n;
 }
 
-int Accept(int fd,struct sockaddr *sa,socklen_t *sa_lenptr){
+int Accept(int fd, struct sockaddr *sa, socklen_t *sa_lenptr){
     int n;
 again:
-    if((n = accept(fd,sa,sa_lenptr))<0){
+    if((n = accept(fd, sa, sa_lenptr)) < 0){
         if(errno == ECONNABORTED|errno == EINTR){
             goto again;
         }
@@ -53,10 +53,10 @@ again:
     return n;
 }
 
-int Connect(int fd,const struct sockaddr *sa,socklen_t sa_len){
+int Connect(int fd, const struct sockaddr *sa, socklen_t sa_len){
     int n;
 again:
-    if((n = connect(fd,sa,sa_len)) == -1){
+    if((n = connect(fd, sa, sa_len)) == -1){
         if(errno == EINTR){
             goto again;
         }
@@ -65,10 +65,10 @@ again:
     return n;
 }
 
-ssize_t Read(int fd,void *buf,size_t buf_size){
+ssize_t Read(int fd, void *buf, size_t buf_size){
     int n;
 again:
-    if((n = read(fd,buf,buf_size)) == -1){
+    if((n = read(fd, buf, buf_size)) == -1){
         if(errno == EINTR){
             goto again;
         }
@@ -77,10 +77,10 @@ again:
     return n;
 }
 
-ssize_t Write(int fd,const void *buf,size_t buf_size){
+ssize_t Write(int fd, const void *buf, size_t buf_size){
     int n;
 again:
-    if((n = write(fd,buf,buf_size)) == -1){
+    if((n = write(fd, buf, buf_size)) == -1){
         if(errno == EINTR){
             goto again;
         }
@@ -89,19 +89,19 @@ again:
     return n;
 }
 
-ssize_t Read_one(int fd,char *buf){
+ssize_t Read_one(int fd, char *buf){
     int n;
     n = Read(fd,buf,1);
     buf[1] = '\0';
     return n;
 }
 
-ssize_t Read_line(int fd,char *buf,size_t buf_size){
+ssize_t Read_line(int fd, char *buf, size_t buf_size){
     int n;
     int i = 0;
     char ch;
-    while(i < buf_size&&ch !='\n'){
-        n = Read_one(fd,&ch);
+    while((i < buf_size) && (ch !='\n')){
+        n = Read_one(fd, &ch);
         if(n > 1 && ch != '\n'){
             buf[i] = ch;
             i++;
@@ -117,7 +117,7 @@ ssize_t Read_line(int fd,char *buf,size_t buf_size){
 ssize_t Recv(int sockfd, void *buf, size_t len, int flags){
     int n;
 again:
-    if((n = recv(sockfd,buf,len,flags)) == -1){
+    if((n = recv(sockfd, buf, len, flags)) == -1){
         if(errno == EINTR){
             goto again;
         }
@@ -129,7 +129,7 @@ again:
 ssize_t Send(int sockfd, const void *buf, size_t len, int flags){
     int n;
 again:
-    if((n = send(sockfd,buf,len,flags)) == -1){
+    if((n = send(sockfd, buf, len, flags)) == -1){
         if(errno == EINTR){
             goto again;
         }
@@ -138,19 +138,19 @@ again:
     return n;
 }
 
-ssize_t Recv_one(int fd,char *buf,int flags){
+ssize_t Recv_one(int fd, char *buf, int flags){
     int n;
-    n = Recv(fd,buf,1,flags);
+    n = Recv(fd, buf, 1, flags);
     buf[1] = '\0';
     return n;
 }
 
-ssize_t Recv_line(int fd,char *buf,size_t len,int flags){
+ssize_t Recv_line(int fd, char *buf, size_t len, int flags){
     int n;
     int i = 0;
     char ch;
-    while(i < len&&ch !='\n'){
-        n = Recv_one(fd,&ch,0);
+    while(i < len && ch !='\n'){
+        n = Recv_one(fd, &ch, 0);
         if(n > 1 && ch != '\n'){
             buf[i] = ch;
             i++;
@@ -176,17 +176,17 @@ again:
     return n;
 }
 
-int initTcpSocket(const int port,char *IP){
-    int fd = Socket(AF_INET,SOCK_STREAM,0);
+int initTcpSocket(const int port, char *IP){
+    int fd = Socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in serv;
-    bzero(&serv,sizeof(serv));
+    bzero(&serv, sizeof(serv));
     serv.sin_family = AF_INET;
     serv.sin_port = htons(port);
     if(IP == NULL){
         serv.sin_addr.s_addr = htonl(INADDR_ANY);
     }
     else{
-        if(inet_pton(AF_INET,IP,&serv.sin_addr.s_addr) <= 0){
+        if(inet_pton(AF_INET, IP, &serv.sin_addr.s_addr) <= 0){
             perr_exit("inet_pton");
         }
     }
@@ -194,33 +194,33 @@ int initTcpSocket(const int port,char *IP){
     int opt = 1;
     int ret ;
 again:
-    if(ret = setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt))!=0){
+    if(ret = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) != 0){
         if(errno == EINTR){
             goto again;
         }
         perr_exit("setsockopt");
     }
 
-    Bind(fd,(struct sockaddr *)&serv,sizeof(serv));
+    Bind(fd, (struct sockaddr *)&serv, sizeof(serv));
     Listen(fd,128);
     return fd;  
 }
 
-int initTcpConn(const int port,char *IP){
-    int fd = socket(AF_INET,SOCK_STREAM,0);
+int initTcpConn(const int port, char *IP){
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in serv;
-    bzero(&serv,sizeof(serv));
+    bzero(&serv, sizeof(serv));
     serv.sin_port = htons(port);
     serv.sin_family = AF_INET;
     if(IP!=NULL){
-        inet_pton(AF_INET,IP,&serv.sin_addr.s_addr);
+        inet_pton(AF_INET, IP, &serv.sin_addr.s_addr);
     }
     else{
-        inet_pton(AF_INET,"127.0.0.1",&serv.sin_addr.s_addr);
+        inet_pton(AF_INET, "127.0.0.1", &serv.sin_addr.s_addr);
     }
 
     socklen_t servlen = sizeof(serv); 
 
-    Connect(fd,(struct sockaddr *)&serv,servlen);
+    Connect(fd, (struct sockaddr *)&serv, servlen);
     return fd;
 }

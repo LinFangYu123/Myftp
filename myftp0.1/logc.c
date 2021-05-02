@@ -22,7 +22,7 @@ static void get_current_time(char *buf, int len)
 }
 
 void log_create(char *filename){
-    pFile = fopen(filename,"a+");
+    pFile = fopen(filename, "a+");
     if(pFile == NULL){
         perror("fopen");
         exit(1);

@@ -50,9 +50,9 @@ typedef struct MANAGER{
 
 void *workercallback(void *arg);
 
-int create_thread_pool(void *thread_pool,int max_thread_num,int worker_num,int allow_free_num);
+int create_thread_pool(void *thread_pool, int max_thread_num, int worker_num, int allow_free_num);
 
-int thread_pool_add_task(void *thread_pool,void *(*newtask)(void *arg),void *arg);
+int thread_pool_add_task(void *thread_pool, void *(*newtask)(void *arg), void *arg);
 
 int thread_pool_destroy(void *thread_pool);
 

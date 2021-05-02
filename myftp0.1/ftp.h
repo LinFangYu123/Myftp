@@ -20,10 +20,10 @@
 
 void Dirlist(int fd);
 
-void Dircd(char *path,int fd,struct sockaddr_in clie);
+void Dircd(char *path, int fd, struct sockaddr_in clie);
 
-int get(int cfd,char *filename,struct sockaddr_in clie);
+int get(int cfd, char *filename, struct sockaddr_in clie);
 
-int put(int cfd,char *filename,struct sockaddr_in clie);
+int put(int cfd, char *filename, struct sockaddr_in clie);
 
 #endif

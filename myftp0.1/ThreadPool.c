@@ -59,22 +59,22 @@ int create_thread_pool(void *thread_pool,int max_thread_num,int worker_num,int a
     pool->current_thread_task_num = 0;
     pool->current_wait_task_num = 0;
     pool->max_free_thread_num = allow_free_num;
-    pthread_mutex_init(&pool->mutex,NULL);
-    pthread_cond_init(&pool->cond,NULL);
+    pthread_mutex_init(&pool->mutex, NULL);
+    pthread_cond_init(&pool->cond, NULL);
     
     int i;
-    for(i = 0;i<worker_num;i++){
+    for(i = 0; i<worker_num; i++){
         pool->current_thread_num++;
         thread_pool_worker *worker = (thread_pool_worker*)malloc(sizeof(thread_pool_worker));
         if(worker == NULL){
             perror("worker malloc");
             return -2;
         }
-        memset(worker,0,sizeof(worker));
+        memset(worker, 0, sizeof(worker));
         worker->next = NULL;
         worker->prev = NULL;
         worker->pool = pool;
-        int ret = pthread_create(&worker->pthread_id,NULL,workercallback,(void *)worker);
+        int ret = pthread_create(&worker->pthread_id, NULL, workercallback, (void *)worker);
         if(ret){
             perror("pthread_create");
             free(worker);
@@ -95,7 +95,7 @@ int create_thread_pool(void *thread_pool,int max_thread_num,int worker_num,int a
     return 0;
 }
 
-int thread_pool_add_task(void *thread_pool,void *(*newtask)(void *arg),void *arg){
+int thread_pool_add_task(void *thread_pool, void *(*newtask)(void *arg), void *arg){
     pthread_pool *pool = (pthread_pool *)thread_pool;
     if(pool == NULL){
         return -1;
@@ -122,9 +122,9 @@ int thread_pool_add_task(void *thread_pool,void *(*newtask)(void *arg),void *arg
         pool->tasks_end = pool->tasks_end->next;
     }
     pool->current_wait_task_num++;
-    assert(pool->tasks !=NULL);
+    assert(pool->tasks != NULL);
     do{
-        if(pool->current_thread_free_num == 0&&pool->max_thread_num > pool->current_thread_num){
+        if((pool->current_thread_free_num == 0) && (pool->max_thread_num > pool->current_thread_num)){
             thread_pool_worker *worker = (thread_pool_worker *)malloc(sizeof(thread_pool_worker));
             if(worker == NULL){
                 break;
@@ -132,7 +132,7 @@ int thread_pool_add_task(void *thread_pool,void *(*newtask)(void *arg),void *arg
             worker->pool = pool;
             worker->next = NULL;
             worker->prev = NULL;
-            int ret = pthread_create(&worker->pthread_id,NULL,workercallback,(void *)worker);
+            int ret = pthread_create(&worker->pthread_id, NULL, workercallback, (void *)worker);
             if(ret != 0){
                 free(worker);
                 worker = NULL;
@@ -162,7 +162,7 @@ int thread_pool_destroy(void *thread_pool){
     pool->shutdown = 1;
     pthread_cond_broadcast(&pool->cond);
     while(pool->workers != NULL){
-        pthread_join(pool->workers->pthread_id,NULL);
+        pthread_join(pool->workers->pthread_id, NULL);
         
         thread_pool_worker *worker = pool->workers;
         pool->workers = pool->workers->next;
